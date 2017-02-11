@@ -22,39 +22,48 @@ namespace Pinger
             Thread.Sleep(-1);
         }
 
+        // подготовить микроконтроллер для работы с интернетом
         private void enableNetworking()
         {
+            // Настраиваем Wi-Fi модуль WIZNet W5100
             WIZnet_W5100.Enable(SPI.SPI_module.SPI1,    // спецификация производителя
                 (Cpu.Pin)FEZ_Pin.Digital.Di10,          // спецификация производителя
                 (Cpu.Pin)FEZ_Pin.Digital.Di7,           // ???
                 false);
 
             // TODO пояснить что и зачем
+            // ИП аддресс для нашего микроконтроллера
             byte[] ipAddress = new byte[] { 192, 168, 17, 36 };
             byte[] netmask = new byte[] { 255, 255, 255, 0 };
             byte[] gateway = new byte[] { 192, 168, 17, 1 };
             // set our own mac address for this device
             byte[] macAddress = new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x36 };
 
+            // enable microcontroller to use static IP
             NetworkInterface.EnableStaticIP(ipAddress, netmask, gateway, macAddress);
         }
 
         private void Ping()
         {
+            // target endpoint
             IPEndPoint routerEndPoint = new IPEndPoint(
                 new IPAddress(new byte[] { 192, 168, 17, 1 }), // ИП роутера
                 80); // http порт
 
             while (true)
             {
-                // установить новое соединение
+                // открываем сокет для передачи информации
                 Socket socket = new Socket(AddressFamily.InterNetwork, 
                     SocketType.Dgram, ProtocolType.Udp);    // UDP
 
                 for (int i = 0; i < 1000; i++)
                 {
-                    // шлём роутеру "1"
+                    // шлём роутеру (reouterEndPoint) данные через наш сокет
                     socket.SendTo(new byte[] { 1 }, routerEndPoint);
+                    socket.SendTo(new byte[] { 1,2 }, routerEndPoint);
+                    socket.SendTo(new byte[] { 1,2,3 }, routerEndPoint);
+                    socket.SendTo(new byte[] { 1,2,3,4 }, routerEndPoint);
+                    socket.SendTo(new byte[] { 1,2,3,4,5 }, routerEndPoint);
                     Thread.Sleep(100);                    
                 }
 

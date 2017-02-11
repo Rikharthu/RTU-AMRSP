@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pinger", "Pinger\Pinger.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server", "Server\Server.csproj", "{8A1CC4E0-437E-4C08-8152-D9389C2933DF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client", "Client\Client.csproj", "{53442938-6B06-4F75-B31E-8B40B63A7B4D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -65,6 +67,10 @@ Global
 		{8A1CC4E0-437E-4C08-8152-D9389C2933DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8A1CC4E0-437E-4C08-8152-D9389C2933DF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8A1CC4E0-437E-4C08-8152-D9389C2933DF}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{53442938-6B06-4F75-B31E-8B40B63A7B4D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{53442938-6B06-4F75-B31E-8B40B63A7B4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{53442938-6B06-4F75-B31E-8B40B63A7B4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{53442938-6B06-4F75-B31E-8B40B63A7B4D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
