@@ -103,9 +103,9 @@ namespace Client
                 byte lowByte = response[1];
 
                 // combine high and low bytes
-                //int result = lowByte | (highByte << 8);
                 // better use shorts, since it has exactly 2 bytes (int has 4 bytes=> needs two's complement)
                 short result = (short)(lowByte | (highByte << 8));
+                //int result = lowByte | (highByte << 8);
                 // check if highest byte is 1 (=> it is negative)
                 //if (highByte >> 7 == 1)
                 //{
