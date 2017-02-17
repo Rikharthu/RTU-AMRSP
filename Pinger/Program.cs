@@ -56,7 +56,7 @@ namespace Pinger
                 Socket socket = new Socket(AddressFamily.InterNetwork, 
                     SocketType.Dgram, ProtocolType.Udp);    // UDP
 
-                for (int i = 0; i < 1000; i++)
+                for (int i = 0; i < 30; i++)
                 {
                     // шлём роутеру (reouterEndPoint) данные через наш сокет
                     socket.SendTo(new byte[] { 1 }, routerEndPoint);
