@@ -12,8 +12,8 @@ namespace Server
 {
     public class Program
     {
-        Thread serverThread;
-        private bool isLedLit = false;
+        OutputPort led;
+        Thread pingThread;
 
         private void StartWebServer()
         {
@@ -30,13 +30,14 @@ namespace Server
                 {
                     // wait for incoming request
                     // iegut context'u kas satur pieprasijumu
+                    // wait for the incoming request
                     httpContext = httpListener.GetContext();
                     if (httpContext == null) continue;
 
                     // sagatabot atbildi
-                    byte[] response = this.PrepareResponseV2(httpContext);
+                    byte[] response = this.PrepareResponseV3LED(httpContext);
                     // nosutit atbildi
-                    this.SendResponse(httpContext, response);
+                    this.SendResponse(httpContext, response, 202); // 202 - ACCEPTED
                 }
                 catch (Exception e)
                 {
@@ -70,6 +71,7 @@ namespace Server
             bool buttonOnePressed = false;
             bool buttonTwoPressed = false;
 
+            // check if we requested a POST request
             if (context.Request.HttpMethod == "POST")
             {
                 // from submitted form we get "buttonTwo=Button+Two+%3A%28" if second button is pressed
@@ -110,14 +112,14 @@ namespace Server
         /**  Control a LED */
         private byte[] PrepareResponseV3LED(HttpListenerContext context)
         {
-            bool buttonPressed = false;
+            bool isLedButtonPressed = false;
 
             if (context.Request.HttpMethod == "POST")
             {
                 // from submitted form we get "buttonTwo=Button+Two+%3A%28" if second button is pressed
                 String contentstring = this.GetContentString(context.Request);
 
-                buttonPressed = contentstring.IndexOf("ledBtn") != -1;
+                isLedButtonPressed = contentstring.IndexOf("led_button") != -1;
             }
 
             // TODO extract to resources
@@ -129,15 +131,25 @@ namespace Server
                             <hl>This comes from FEZ Panda II</hl>
                             <div>This is some text</div>";
 
-            if (buttonPressed)
+            if (isLedButtonPressed)
             {
-                //!++ TODO toggle led
-                responseString += @"<div style=""color:red"">You pressed button one!</div>";
+                ToggleLed();
             }
 
+            responseString += @"<div style=""color:";
+            if (led.Read())
+            {
+                // LED is on
+                responseString += @"green"">LED is ON";
+            }else
+            {
+                // LED is off
+                responseString += @"red"">LED is OFF";
+            }
+            responseString += "</div>";
+
             responseString += @"
-                            <div><input type=""submit"" name=""buttonOne"" value=""Button One :)""/></div>
-                            <div><input type=""submit"" name=""buttonTwo"" value=""Button Two :(""/></div>
+                            <div><input type=""submit"" name=""led_button"" value=""Toggle LED""/></div>
                         </form>
                     </body>
                 </html>";
@@ -152,10 +164,10 @@ namespace Server
             return new String(Encoding.UTF8.GetChars(requestData));
         }
 
-        private void SendResponse(HttpListenerContext context, byte[] response)
+        private void SendResponse(HttpListenerContext context, byte[] response,int statusCode)
         {
             // html status code
-            context.Response.StatusCode = 200;
+            context.Response.StatusCode = statusCode;
             // informet klientu ka atbilde ir html kods
             context.Response.ContentType = "text/html";
             try
@@ -188,10 +200,57 @@ namespace Server
             NetworkInterface.EnableStaticIP(ipAddress, netmask, gateway, macAddress);
         }
 
+        private void ToggleLed()
+        {
+            led.Write(!led.Read());
+        }
+
+        private void Setup()
+        {
+            led = new OutputPort(
+                (Cpu.Pin)FEZ_Pin.Digital.LED, 
+                false);
+        }
+
+        private void startPing()
+        {
+            pingThread = new Thread(this.Ping);
+            pingThread.Start();
+        }
+
+        private void Ping()
+        {
+            // target endpoint
+            IPEndPoint routerEndPoint = new IPEndPoint(
+                new IPAddress(new byte[] { 192, 168, 17, 1 }), // ИП роутера
+                80); // http порт
+
+            while (true)
+            {
+                // открываем сокет для передачи информации
+                Socket socket = new Socket(AddressFamily.InterNetwork,
+                    SocketType.Dgram, ProtocolType.Udp);    // UDP
+
+                for (int i = 0; i < 5; i++)
+                {
+                    // шлём роутеру (reouterEndPoint) данные через наш сокет
+                    socket.SendTo(new byte[] { 1 }, routerEndPoint);
+                    Thread.Sleep(100);
+                }
+
+                // закрываем соединение
+                socket.Close();
+                Thread.Sleep(500);
+            }
+        }
+
         public static void Main()
         {
             Program p = new Program();
+            p.Setup();
+            
             p.EnableNetworking();
+            p.startPing();
             p.StartWebServer();
         }
 
