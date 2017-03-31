@@ -30,6 +30,7 @@ namespace Roomba
             this.wakeupSignalPort = new OutputPort((Cpu.Pin)FEZ_Pin.Digital.Di47, true);
         }
 
+        //!++ COMMENT TO COMPILE
         public void SubscribeToSensorPacket(SensorPacket sensorPacket, int sensorPacketSize, int frequency,
             SensorPacketQuerier.SensorDataReceivedDelegate dataReceivedDelegate)
         {

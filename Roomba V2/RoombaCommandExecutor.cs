@@ -101,7 +101,7 @@ namespace Roomba
                     output += " " + b;
                 }
             }
-            Debug.Print(output);
+            //Debug.Print(output);
         }
     };
 }

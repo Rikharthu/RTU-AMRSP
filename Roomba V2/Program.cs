@@ -8,6 +8,10 @@ namespace Roomba_V2
         public static void Main()
         {
             Debug.Print(Resources.GetString(Resources.StringResources.String1));
+            while (true)
+            {
+
+            }
         }
     }
 }

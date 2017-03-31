@@ -27,6 +27,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Roomba", "Roomba\Roomba.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MFConsoleApplication1", "MFConsoleApplication1\MFConsoleApplication1.csproj", "{69FD312D-1A07-475C-B33F-A300895FCB65}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Roomba V2", "Roomba V2\Roomba V2.csproj", "{0B0758B6-F8F1-4832-86FF-3B7037F00535}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -231,6 +233,24 @@ Global
 		{69FD312D-1A07-475C-B33F-A300895FCB65}.Release|x86.ActiveCfg = Release|Any CPU
 		{69FD312D-1A07-475C-B33F-A300895FCB65}.Release|x86.Build.0 = Release|Any CPU
 		{69FD312D-1A07-475C-B33F-A300895FCB65}.Release|x86.Deploy.0 = Release|Any CPU
+		{0B0758B6-F8F1-4832-86FF-3B7037F00535}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B0758B6-F8F1-4832-86FF-3B7037F00535}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0B0758B6-F8F1-4832-86FF-3B7037F00535}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{0B0758B6-F8F1-4832-86FF-3B7037F00535}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{0B0758B6-F8F1-4832-86FF-3B7037F00535}.Debug|x64.Build.0 = Debug|Any CPU
+		{0B0758B6-F8F1-4832-86FF-3B7037F00535}.Debug|x64.Deploy.0 = Debug|Any CPU
+		{0B0758B6-F8F1-4832-86FF-3B7037F00535}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{0B0758B6-F8F1-4832-86FF-3B7037F00535}.Debug|x86.Build.0 = Debug|Any CPU
+		{0B0758B6-F8F1-4832-86FF-3B7037F00535}.Debug|x86.Deploy.0 = Debug|Any CPU
+		{0B0758B6-F8F1-4832-86FF-3B7037F00535}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0B0758B6-F8F1-4832-86FF-3B7037F00535}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0B0758B6-F8F1-4832-86FF-3B7037F00535}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{0B0758B6-F8F1-4832-86FF-3B7037F00535}.Release|x64.ActiveCfg = Release|Any CPU
+		{0B0758B6-F8F1-4832-86FF-3B7037F00535}.Release|x64.Build.0 = Release|Any CPU
+		{0B0758B6-F8F1-4832-86FF-3B7037F00535}.Release|x64.Deploy.0 = Release|Any CPU
+		{0B0758B6-F8F1-4832-86FF-3B7037F00535}.Release|x86.ActiveCfg = Release|Any CPU
+		{0B0758B6-F8F1-4832-86FF-3B7037F00535}.Release|x86.Build.0 = Release|Any CPU
+		{0B0758B6-F8F1-4832-86FF-3B7037F00535}.Release|x86.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

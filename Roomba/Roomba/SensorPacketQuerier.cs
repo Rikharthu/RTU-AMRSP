@@ -6,6 +6,7 @@ namespace Roomba
 {
     class SensorPacketQuerier
     {
+        //!++ COMMENT TO COMPILE
         private RoombaCommandExecutor cmdExecutor;
         private SensorPacket sensorPacket;
         private int sensorPacketSize;
