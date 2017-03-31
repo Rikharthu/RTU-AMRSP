@@ -1,7 +1,7 @@
 using System;
-using System.IO.Ports;
 using Microsoft.SPOT;
 using System.Threading;
+using System.IO.Ports;
 
 namespace Roomba
 {
@@ -35,13 +35,26 @@ namespace Roomba
             }
         }
 
-        public byte[] Read(int bytesToRead)
+        public byte[] Read(int count)
         {
-            lock (readWriteLock)
+            lock (this)
             {
-                this.Open();
-                byte[] data = new byte[bytesToRead];
-                this.serialPort.Read(data, 0, data.Length);
+                byte[] data = new byte[count];
+
+                int bytesRead = 0;
+                int offset = 0;
+
+                while(offset < count)
+                {
+                    bytesRead = this.serialPort.Read(data, offset, data.Length - offset);
+                    offset += bytesRead;
+                }
+
+                if(offset != count)
+                {
+                    Debug.Print("Serial Read fail");
+                }
+
                 return data;
             }
         }
