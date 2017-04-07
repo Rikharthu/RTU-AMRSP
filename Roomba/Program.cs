@@ -1,13 +1,15 @@
 using System;
 using Microsoft.SPOT;
 using System.Threading;
+using Roomba.Networking;
 
 namespace Roomba
 {
-    public class Program
+    public class Program : OnWebInterractionListener
     {
         const int MAX_BATTERY_CAPACITY_THEORETICAL = 65535;
         const int MAX_BATTERY_CAPACITY_PRACTICAL = 2696;
+        public static int lastKnownBatteryLevel = -1;
 
         RoombaController controller;
 
@@ -19,18 +21,39 @@ namespace Roomba
 
         public void Run()
         {
-            controller = new RoombaController();
-            controller.Start();
+            //controller = new RoombaController();
+            //controller.Start();
             //controller.CmdExecutor.ExecCommand(RoombaCommand.Safe);
 
-            TestDriving();
+            //!++ UNCOMMENT TO STOP
+            //Stop();
+
+            //TestDriving();
             //TestSensors();
+
+            //!+ Uzdevums 2
             //DoUzdevums2();
+
+            WebServer server = new WebServer();
+            server.setOnWebInterractionListener(this);
+            server.Start();
+
             while (true)
             {
             }
 
             Debug.Print("Dead");
+        }
+
+        private void Stop()
+        {
+            if (controller != null)
+            {
+                
+                controller.CmdExecutor.Stop();
+                controller.TurnOff();
+                controller = null;
+            }
         }
 
         private void TestDriving()
@@ -68,8 +91,6 @@ namespace Roomba
         {
             controller.SubscribeToSensorPacket(SensorPacket.BatteryCharge, 2, 100, this.BatteryChargeDataReceived);
             controller.SubscribeToSensorPacket(SensorPacket.BumpsWheeldrops, 1, 100, this.Uzdevums2_BumpWheeldropsDataReceived);
-
-            controller.CmdExecutor.DriveStraight(100);
         }
 
         //++ TODO check if there's no obstacles left (as sensor only triggers when something happens
@@ -78,22 +99,32 @@ namespace Roomba
         {
             int bumpCode = DecodeBump(sensorData);
 
+            Random rnd = new Random();
+
+            int randomDelay = (int)(rnd.NextDouble() * 300) + 300;
+
             switch (bumpCode)
             {
                 case 1:
                     // bump on left => turn right
+                    controller.CmdExecutor.DriveStraight(-600);
+                    Thread.Sleep(100);
                     controller.CmdExecutor.TurnRight(300);
-                    Thread.Sleep(300);
+                    Thread.Sleep(randomDelay);
                     break;
                 case 2:
                     // bump on right => turn left
-                    //controller.CmdExecutor.TurnLeft(300);
-                    //Thread.Sleep(300);
+                    controller.CmdExecutor.DriveStraight(-600);
+                    Thread.Sleep(100);
+                    controller.CmdExecutor.TurnLeft(300);
+                    Thread.Sleep(randomDelay);
                     break;
                 case 3:
                     // both sides => 360 deg
+                    controller.CmdExecutor.DriveStraight(-600);
+                    Thread.Sleep(100);
                     controller.CmdExecutor.TurnLeft(100);
-                    Thread.Sleep(2500);
+                    Thread.Sleep(randomDelay + 100);
                     controller.CmdExecutor.Stop();
                     break;
                 default:
@@ -106,8 +137,9 @@ namespace Roomba
         private void BatteryChargeDataReceived(short sensorData)
         {
             Debug.Print("Battery charge: " + sensorData);
-            int chargePercent =(int)( (float)sensorData / MAX_BATTERY_CAPACITY_PRACTICAL*100);
-            controller.CmdExecutor.ShowDigitsASCII(chargePercent+"%");
+            int chargePercent = (int)((float)sensorData / MAX_BATTERY_CAPACITY_PRACTICAL * 100);
+            lastKnownBatteryLevel = chargePercent;
+            controller.CmdExecutor.ShowDigitsASCII(chargePercent + "%");
 
         }
 
@@ -152,6 +184,25 @@ namespace Roomba
         private void BumpWheeldropsDataReceived(short sensorData)
         {
             int bumpCode = DecodeBump(sensorData);
+        }
+
+        // OnWebInterractionListener
+        public void OnInterraction(int code)
+        {
+            switch (code)
+            {
+                case WebServer.CODE_START:
+                    Debug.Print("Received CODE_START");
+                    // every time restart again
+                    controller = new RoombaController();
+                    controller.Start();
+                    DoUzdevums2();
+                    break;
+                case WebServer.CODE_STOP:
+                    Debug.Print("Received CODE_STOP");
+                    Stop();
+                    break;
+            }
         }
     }
 }

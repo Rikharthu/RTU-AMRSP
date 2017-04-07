@@ -38,6 +38,7 @@
     </StartupObject>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Networking\WebServer.cs" />
     <Compile Include="Roomba\Enums.cs" />
     <Compile Include="Utils\Common.cs" />
     <Compile Include="EventFixer.cs" />
@@ -55,6 +56,8 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="FEZPanda_II_GHIElectronics.NETMF.FEZ, Version=4.1.8.0, Culture=neutral, processorArchitecture=MSIL" />
+    <Reference Include="GHIElectronics.NETMF.W5100, Version=4.1.9.0, Culture=neutral, processorArchitecture=MSIL" />
+    <Reference Include="GHIElectronics.NETMF.W5100.Http, Version=4.1.9.0, Culture=neutral, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.SPOT.Graphics" />
     <Reference Include="Microsoft.SPOT.Hardware" />
     <Reference Include="Microsoft.SPOT.Hardware.SerialPort" />
@@ -68,7 +71,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Networking\" />
     <Folder Include="Roomba\Sensors\" />
     <Folder Include="Tasks\" />
   </ItemGroup>
