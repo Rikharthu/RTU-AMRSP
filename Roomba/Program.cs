@@ -2,10 +2,11 @@ using System;
 using Microsoft.SPOT;
 using System.Threading;
 using Roomba.Networking;
+using Roomba.Roomba;
 
 namespace Roomba
 {
-    public class Program : OnWebInterractionListener
+    public class Program : IRoombaWebController
     {
         const int MAX_BATTERY_CAPACITY_THEORETICAL = 65535;
         const int MAX_BATTERY_CAPACITY_PRACTICAL = 2696;
@@ -203,6 +204,23 @@ namespace Roomba
                     Stop();
                     break;
             }
+        }
+
+        // ___IRoombaWebController___
+
+        public float GetChargeLevel()
+        {
+            throw new NotImplementedException();
+        }
+
+        public int GetStatus()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void OnCommandDispatched(int code)
+        {
+            throw new NotImplementedException();
         }
     }
 }

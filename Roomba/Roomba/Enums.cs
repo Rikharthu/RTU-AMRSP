@@ -40,4 +40,10 @@ namespace Roomba
         BumpsWheeldrops = 7,
         BatteryCharge = 25
     }
+
+    public enum WebCommand
+    {
+        Wander = 1,
+        Stop = 2
+    }
 }

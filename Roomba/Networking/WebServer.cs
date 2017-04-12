@@ -7,6 +7,7 @@ using GHIElectronics.NETMF.Net.NetworkInformation;
 using GHIElectronics.NETMF.FEZ;
 using System.Threading;
 using GHIElectronics.NETMF.Net.Sockets;
+using Roomba.Roomba;
 
 namespace Roomba.Networking
 {
@@ -15,7 +16,7 @@ namespace Roomba.Networking
         public const int CODE_START = 1;
         public const int CODE_STOP = 2;
 
-        private OnWebInterractionListener listener;
+        private IRoombaWebController roombaWebCtrl;
 
         Thread pingThread;
 
@@ -57,9 +58,9 @@ namespace Roomba.Networking
             }
         }
 
-        public void setOnWebInterractionListener(OnWebInterractionListener listener)
+        public void setOnWebInterractionListener(IRoombaWebController rmbWebCtrl)
         {
-            this.listener = listener;
+            roombaWebCtrl = rmbWebCtrl;
         }
 
         /**  Control a Roomba */
@@ -89,11 +90,11 @@ namespace Roomba.Networking
 
             //!+ Process here
 
-            if (listener != null)
+            if (roombaWebCtrl != null)
             {
                 if (isStartButtonPressed)
                 {
-                    listener.OnInterraction(CODE_START);
+                    roombaWebCtrl.OnCommandDispatched(CODE_START);
                     responseString += "<div>Status: started</div>";
                 }
                 else
@@ -102,7 +103,7 @@ namespace Roomba.Networking
                 }
                 if (isStopButtonPressed)
                 {
-                    listener.OnInterraction(CODE_STOP);
+                    roombaWebCtrl.OnCommandDispatched(CODE_STOP);
                 }
             }
 

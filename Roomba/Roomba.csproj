@@ -40,6 +40,7 @@
   <ItemGroup>
     <Compile Include="Networking\WebServer.cs" />
     <Compile Include="Roomba\Enums.cs" />
+    <Compile Include="Roomba\IRoombaWebController.cs" />
     <Compile Include="Utils\Common.cs" />
     <Compile Include="EventFixer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
