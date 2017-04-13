@@ -2,7 +2,6 @@ using System;
 using Microsoft.SPOT;
 using System.Threading;
 using Roomba.Networking;
-using Roomba.Roomba;
 
 namespace Roomba
 {
@@ -10,7 +9,8 @@ namespace Roomba
     {
         const int MAX_BATTERY_CAPACITY_THEORETICAL = 65535;
         const int MAX_BATTERY_CAPACITY_PRACTICAL = 2696;
-        public static int lastKnownBatteryLevel = -1;
+        private float lastKnownBatteryLevel = -1;
+        public int status;
 
         RoombaController controller;
 
@@ -50,7 +50,7 @@ namespace Roomba
         {
             if (controller != null)
             {
-                
+
                 controller.CmdExecutor.Stop();
                 controller.TurnOff();
                 controller = null;
@@ -138,9 +138,9 @@ namespace Roomba
         private void BatteryChargeDataReceived(short sensorData)
         {
             Debug.Print("Battery charge: " + sensorData);
-            int chargePercent = (int)((float)sensorData / MAX_BATTERY_CAPACITY_PRACTICAL * 100);
+            float chargePercent = (float)sensorData / MAX_BATTERY_CAPACITY_PRACTICAL;
             lastKnownBatteryLevel = chargePercent;
-            controller.CmdExecutor.ShowDigitsASCII(chargePercent + "%");
+            controller.CmdExecutor.ShowDigitsASCII((int)(chargePercent * 100) + "");
 
         }
 
@@ -187,30 +187,11 @@ namespace Roomba
             int bumpCode = DecodeBump(sensorData);
         }
 
-        // OnWebInterractionListener
-        public void OnInterraction(int code)
-        {
-            switch (code)
-            {
-                case WebServer.CODE_START:
-                    Debug.Print("Received CODE_START");
-                    // every time restart again
-                    controller = new RoombaController();
-                    controller.Start();
-                    DoUzdevums2();
-                    break;
-                case WebServer.CODE_STOP:
-                    Debug.Print("Received CODE_STOP");
-                    Stop();
-                    break;
-            }
-        }
-
         // ___IRoombaWebController___
 
         public float GetChargeLevel()
         {
-            throw new NotImplementedException();
+            return lastKnownBatteryLevel;
         }
 
         public int GetStatus()
@@ -220,7 +201,19 @@ namespace Roomba
 
         public void OnCommandDispatched(int code)
         {
-            throw new NotImplementedException();
+            switch (code)
+            {
+                case WebServer.CODE_START:
+                    Debug.Print("Received CODE_START");
+                    controller = new RoombaController();
+                    controller.Start();
+                    DoUzdevums2();
+                    break;
+                case WebServer.CODE_STOP:
+                    Debug.Print("Received CODE_STOP");
+                    Stop();
+                    break;
+            }
         }
     }
 }

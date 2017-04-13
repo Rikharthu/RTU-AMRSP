@@ -31,6 +31,13 @@ namespace Roomba
             new Thread(this.DoWork).Start();
         }
 
+        public void Stop()
+        {
+            stop = true;
+            // wait some time until it is guaranteed to be stopped
+            Thread.Sleep(frequency);
+        }
+
         private void DoWork()
         {
             while (!stop)

@@ -7,7 +7,6 @@ using GHIElectronics.NETMF.Net.NetworkInformation;
 using GHIElectronics.NETMF.FEZ;
 using System.Threading;
 using GHIElectronics.NETMF.Net.Sockets;
-using Roomba.Roomba;
 
 namespace Roomba.Networking
 {
@@ -110,7 +109,7 @@ namespace Roomba.Networking
             responseString += @"
                             <div><input type=""submit"" name=""btn_start"" value=""Start""/></div>
                             <div><input type=""submit"" name=""btn_stop"" value=""Stop""/></div>"
-                        + "<div>Charge: " + (Program.lastKnownBatteryLevel == -1 ? "Unknown" : (Program.lastKnownBatteryLevel+"%")) + "</div>" +
+                        + "<div>Charge: " + (roombaWebCtrl.GetChargeLevel() == -1 ? "Unknown" : ((int)(roombaWebCtrl.GetChargeLevel() * 100) + "%")) + "</div>" +
                         @"</form>
                     </body>
                 </html>";
@@ -206,8 +205,10 @@ namespace Roomba.Networking
         }
     }
 
-    public interface OnWebInterractionListener
+    public interface IRoombaWebController
     {
-        void OnInterraction(int code);
+        float GetChargeLevel();
+        int GetStatus();
+        void OnCommandDispatched(int code);
     }
 }
