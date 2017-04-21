@@ -12,6 +12,8 @@ namespace Roomba.Networking
 {
     class WebServer
     {
+        public const int STATUS_DRIVING = 5;
+        public const int STATUS_STOPPED = 6;
         public const int CODE_START = 1;
         public const int CODE_STOP = 2;
 
@@ -94,17 +96,29 @@ namespace Roomba.Networking
                 if (isStartButtonPressed)
                 {
                     roombaWebCtrl.OnCommandDispatched(CODE_START);
-                    responseString += "<div>Status: started</div>";
-                }
-                else
-                {
-                    responseString += "<div>Status: stopped</div>";
                 }
                 if (isStopButtonPressed)
                 {
                     roombaWebCtrl.OnCommandDispatched(CODE_STOP);
                 }
             }
+
+            // current roomba status
+            string status;
+            switch (roombaWebCtrl.GetStatus())
+            {
+                case STATUS_DRIVING:
+                    status = "driving";
+                    break;
+                case STATUS_STOPPED:
+                    status = "stopped";
+                    break;
+                default:
+                    status = "unknown";
+                    break;
+            }
+
+            responseString += "<div>Status: " + status + "</div>";
 
             responseString += @"
                             <div><input type=""submit"" name=""btn_start"" value=""Start""/></div>

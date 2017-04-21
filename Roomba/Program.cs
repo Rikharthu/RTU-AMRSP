@@ -10,7 +10,7 @@ namespace Roomba
         const int MAX_BATTERY_CAPACITY_THEORETICAL = 65535;
         const int MAX_BATTERY_CAPACITY_PRACTICAL = 2696;
         private float lastKnownBatteryLevel = -1;
-        public int status;
+        private int status;
 
         RoombaController controller;
 
@@ -38,6 +38,7 @@ namespace Roomba
             WebServer server = new WebServer();
             server.setOnWebInterractionListener(this);
             server.Start();
+            status = WebServer.STATUS_STOPPED;
 
             while (true)
             {
@@ -48,6 +49,7 @@ namespace Roomba
 
         private void Stop()
         {
+            status = WebServer.STATUS_STOPPED;
             if (controller != null)
             {
 
@@ -90,6 +92,7 @@ namespace Roomba
 
         private void DoUzdevums2()
         {
+            status = WebServer.STATUS_DRIVING;
             controller.SubscribeToSensorPacket(SensorPacket.BatteryCharge, 2, 100, this.BatteryChargeDataReceived);
             controller.SubscribeToSensorPacket(SensorPacket.BumpsWheeldrops, 1, 100, this.Uzdevums2_BumpWheeldropsDataReceived);
         }
@@ -196,7 +199,7 @@ namespace Roomba
 
         public int GetStatus()
         {
-            throw new NotImplementedException();
+            return status;
         }
 
         public void OnCommandDispatched(int code)
@@ -204,14 +207,20 @@ namespace Roomba
             switch (code)
             {
                 case WebServer.CODE_START:
-                    Debug.Print("Received CODE_START");
-                    controller = new RoombaController();
-                    controller.Start();
-                    DoUzdevums2();
+                    if (status != WebServer.STATUS_DRIVING)
+                    {
+                        Debug.Print("Received CODE_START");
+                        controller = new RoombaController();
+                        controller.Start();
+                        DoUzdevums2();
+                    }
                     break;
                 case WebServer.CODE_STOP:
                     Debug.Print("Received CODE_STOP");
-                    Stop();
+                    if (status != WebServer.STATUS_STOPPED)
+                    {
+                        Stop();
+                    }
                     break;
             }
         }
