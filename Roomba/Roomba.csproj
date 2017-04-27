@@ -39,7 +39,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Networking\WebServer.cs" />
-    <Compile Include="Roomba\Enums.cs" />
+    <Compile Include="Enums.cs" />
+    <Compile Include="Roomba\Sensors\SensorController.cs" />
+    <Compile Include="Tasks\Task.cs" />
+    <Compile Include="Tasks\TaskWander.cs" />
     <Compile Include="Utils\Common.cs" />
     <Compile Include="EventFixer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -51,8 +54,8 @@
     </Compile>
     <Compile Include="Roomba\RoombaCommandExecutor.cs" />
     <Compile Include="Roomba\RoombaController.cs" />
-    <Compile Include="Roomba\SensorPacketQuerier.cs" />
-    <Compile Include="Utils\SerialPortController.cs" />
+    <Compile Include="Roomba\Sensors\SensorPacketQuerier.cs" />
+    <Compile Include="Roomba\SerialPortController.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="FEZPanda_II_GHIElectronics.NETMF.FEZ, Version=4.1.8.0, Culture=neutral, processorArchitecture=MSIL" />
@@ -70,10 +73,7 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Roomba\Sensors\" />
-    <Folder Include="Tasks\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Condition="EXISTS('$(NetMfTargetsBaseDir)$(TargetFrameworkVersion)\CSharp.Targets')" Project="$(NetMfTargetsBaseDir)$(TargetFrameworkVersion)\CSharp.Targets" />
   <Import Condition="!EXISTS('$(NetMfTargetsBaseDir)$(TargetFrameworkVersion)\CSharp.Targets')" Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

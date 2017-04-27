@@ -2,6 +2,7 @@ using System;
 using Microsoft.SPOT;
 using System.Threading;
 using Roomba.Networking;
+using Roomba.Roomba;
 
 namespace Roomba
 {
@@ -13,6 +14,7 @@ namespace Roomba
         private int status;
 
         RoombaController controller;
+        private Tasks currentTask;
 
         public static void Main()
         {
@@ -22,129 +24,67 @@ namespace Roomba
 
         public void Run()
         {
-            //controller = new RoombaController();
-            //controller.Start();
-            //controller.CmdExecutor.ExecCommand(RoombaCommand.Safe);
-
-            //!++ UNCOMMENT TO STOP
-            //Stop();
-
-            //TestDriving();
-            //TestSensors();
-
-            //!+ Uzdevums 2
-            //DoUzdevums2();
-
             WebServer server = new WebServer();
             server.setOnWebInterractionListener(this);
             server.Start();
             status = WebServer.STATUS_STOPPED;
 
-            while (true)
-            {
-            }
-
-            Debug.Print("Dead");
-        }
-
-        private void Stop()
-        {
-            status = WebServer.STATUS_STOPPED;
-            if (controller != null)
-            {
-
-                controller.CmdExecutor.Stop();
-                controller.TurnOff();
-                controller = null;
-            }
-        }
-
-        private void TestDriving()
-        {
-            // move forward for 5 seconds
-            controller.CmdExecutor.DriveStraight(300);
-            Thread.Sleep(1000);
-
-            controller.CmdExecutor.Stop();
-
-            // turn around for 1.3 seconds (~180 degrees)
-            controller.CmdExecutor.TurnLeft(300);
-            Thread.Sleep(1300);
-
-            controller.CmdExecutor.Stop();
-
-            // repeat
-            controller.CmdExecutor.DriveStraight(100);
-            Thread.Sleep(5000);
-
-            controller.CmdExecutor.TurnLeft(300);
-            Thread.Sleep(1300);
-
-            controller.CmdExecutor.Stop();
-            controller.TurnOff();
-        }
-
-        private void TestSensors()
-        {
-            controller.SubscribeToSensorPacket(SensorPacket.BatteryCharge, 2, 100, this.BatteryChargeDataReceived);
-            controller.SubscribeToSensorPacket(SensorPacket.BumpsWheeldrops, 1, 100, this.BumpWheeldropsDataReceived);
-        }
-
-        private void DoUzdevums2()
-        {
-            status = WebServer.STATUS_DRIVING;
-            controller.SubscribeToSensorPacket(SensorPacket.BatteryCharge, 2, 100, this.BatteryChargeDataReceived);
-            controller.SubscribeToSensorPacket(SensorPacket.BumpsWheeldrops, 1, 100, this.Uzdevums2_BumpWheeldropsDataReceived);
-        }
-
-        //++ TODO check if there's no obstacles left (as sensor only triggers when something happens
-        //+ => if you turned around, but still something blocks you, sensors wont trigger, as they state did not change yet
-        private void Uzdevums2_BumpWheeldropsDataReceived(short sensorData)
-        {
-            int bumpCode = DecodeBump(sensorData);
-
             Random rnd = new Random();
 
-            int randomDelay = (int)(rnd.NextDouble() * 300) + 300;
-
-            switch (bumpCode)
+            while (true)
             {
-                case 1:
-                    // bump on left => turn right
-                    controller.CmdExecutor.DriveStraight(-600);
-                    Thread.Sleep(100);
-                    controller.CmdExecutor.TurnRight(300);
-                    Thread.Sleep(randomDelay);
-                    break;
-                case 2:
-                    // bump on right => turn left
-                    controller.CmdExecutor.DriveStraight(-600);
-                    Thread.Sleep(100);
-                    controller.CmdExecutor.TurnLeft(300);
-                    Thread.Sleep(randomDelay);
-                    break;
-                case 3:
-                    // both sides => 360 deg
-                    controller.CmdExecutor.DriveStraight(-600);
-                    Thread.Sleep(100);
-                    controller.CmdExecutor.TurnLeft(100);
-                    Thread.Sleep(randomDelay + 100);
+                if (status == WebServer.STATUS_DRIVING)
+                {
+                    if (this.controller.Sensors.IsBump)
+                    {
+                        int bumpCode = DecodeBump(controller.Sensors.BumpsWheeldropsData);
+                        int randomDelay = (int)(rnd.NextDouble() * 300) + 300;
+
+                        switch (bumpCode)
+                        {
+                            case 1:
+                                // bump on left => turn right
+                                controller.CmdExecutor.DriveStraight(-600);
+                                Thread.Sleep(100);
+                                controller.CmdExecutor.TurnRight(300);
+                                Thread.Sleep(randomDelay);
+                                break;
+                            case 2:
+                                // bump on right => turn left
+                                controller.CmdExecutor.DriveStraight(-600);
+                                Thread.Sleep(100);
+                                controller.CmdExecutor.TurnLeft(300);
+                                Thread.Sleep(randomDelay);
+                                break;
+                            case 3:
+                                // both sides => 360 deg
+                                controller.CmdExecutor.DriveStraight(-600);
+                                Thread.Sleep(100);
+                                controller.CmdExecutor.TurnLeft(100);
+                                Thread.Sleep(randomDelay + 100);
+                                controller.CmdExecutor.Stop();
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        controller.CmdExecutor.DriveStraight(100);
+                        Thread.Sleep(50);
+                    }
+
+                    if (lastKnownBatteryLevel != controller.Sensors.BatteryPercentage)
+                    {
+                        // propagate an update
+                        lastKnownBatteryLevel = controller.Sensors.BatteryPercentage;
+                        controller.CmdExecutor.ShowDigitsASCII(lastKnownBatteryLevel + "");
+                    }
+                }else
+                {
                     controller.CmdExecutor.Stop();
-                    break;
-                default:
-                    controller.CmdExecutor.DriveStraight(100);
-                    break;
+                }
+                
             }
-            controller.CmdExecutor.DriveStraight(100);
-        }
-
-        private void BatteryChargeDataReceived(short sensorData)
-        {
-            Debug.Print("Battery charge: " + sensorData);
-            float chargePercent = (float)sensorData / MAX_BATTERY_CAPACITY_PRACTICAL;
-            lastKnownBatteryLevel = chargePercent;
-            controller.CmdExecutor.ShowDigitsASCII((int)(chargePercent * 100) + "");
-
+            Debug.Print("Dead");
         }
 
         /// <summary>
@@ -185,11 +125,6 @@ namespace Roomba
             }
         }
 
-        private void BumpWheeldropsDataReceived(short sensorData)
-        {
-            int bumpCode = DecodeBump(sensorData);
-        }
-
         // ___IRoombaWebController___
 
         public float GetChargeLevel()
@@ -207,20 +142,10 @@ namespace Roomba
             switch (code)
             {
                 case WebServer.CODE_START:
-                    if (status != WebServer.STATUS_DRIVING)
-                    {
-                        Debug.Print("Received CODE_START");
-                        controller = new RoombaController();
-                        controller.Start();
-                        DoUzdevums2();
-                    }
+                    status = WebServer.STATUS_DRIVING;
                     break;
                 case WebServer.CODE_STOP:
-                    Debug.Print("Received CODE_STOP");
-                    if (status != WebServer.STATUS_STOPPED)
-                    {
-                        Stop();
-                    }
+                    status = WebServer.STATUS_STOPPED;
                     break;
             }
         }

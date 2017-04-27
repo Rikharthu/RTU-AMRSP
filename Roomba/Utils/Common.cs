@@ -1,7 +1,7 @@
 using System;
 using Microsoft.SPOT;
 
-namespace Roomba
+namespace Roomba.Utils
 {
     public static class Common
     {

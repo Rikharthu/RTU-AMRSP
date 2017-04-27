@@ -1,10 +1,11 @@
 using System;
 using Microsoft.SPOT;
 using System.Threading;
+using Roomba.Utils;
 
-namespace Roomba
+namespace Roomba.Roomba.Sensors
 {
-    class SensorPacketQuerier
+    public class SensorPacketQuerier
     {
         //!++ COMMENT TO COMPILE
         private RoombaCommandExecutor cmdExecutor;

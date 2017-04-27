@@ -4,10 +4,11 @@ using Microsoft.SPOT.Hardware;
 using GHIElectronics.NETMF.FEZ;
 using System.Threading;
 using System.Collections;
+using Roomba.Roomba.Sensors;
 
-namespace Roomba
+namespace Roomba.Roomba
 {
-    class RoombaController
+    public class RoombaController
     {
         // from Roomba datasheet
         private const String SERIAL_PORT_NAME = "COM2";
@@ -18,6 +19,8 @@ namespace Roomba
 
         private OutputPort wakeupSignalPort;
         private Stack queriers;
+
+        public SensorController Sensors { get; private set; }
 
         public RoombaCommandExecutor CmdExecutor
         {
@@ -31,6 +34,8 @@ namespace Roomba
             this.cmdExecutor = new RoombaCommandExecutor(this.serialPort);
             // connected to serial port 5 DD (Device Detect), which is used to wake up Roomba
             this.wakeupSignalPort = new OutputPort((Cpu.Pin)FEZ_Pin.Digital.Di47, true);
+
+            this.Sensors = new SensorController(this);
         }
 
         public void SubscribeToSensorPacket(SensorPacket sensorPacket, int sensorPacketSize, int frequency,
@@ -46,12 +51,17 @@ namespace Roomba
         {
             // Wakeup Roomba
             this.SendWakeupSignal();
+            Thread.Sleep(500);
             // Start Roomba
             this.cmdExecutor.ExecCommand(RoombaCommand.Start);
+            Thread.Sleep(50);
             // Allow controlling  through serial port
             this.cmdExecutor.ExecCommand(RoombaCommand.Control);
-
+            Thread.Sleep(50);
             this.cmdExecutor.ExecCommand(RoombaCommand.FullControl);
+            Thread.Sleep(50);
+
+            this.Sensors.StartSensors();
         }
 
         public void TurnOff()

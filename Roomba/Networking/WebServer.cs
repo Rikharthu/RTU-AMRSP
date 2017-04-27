@@ -10,7 +10,7 @@ using GHIElectronics.NETMF.Net.Sockets;
 
 namespace Roomba.Networking
 {
-    class WebServer
+    public class WebServer
     {
         public const int STATUS_DRIVING = 5;
         public const int STATUS_STOPPED = 6;

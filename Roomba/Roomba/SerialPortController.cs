@@ -3,9 +3,9 @@ using Microsoft.SPOT;
 using System.Threading;
 using System.IO.Ports;
 
-namespace Roomba
+namespace Roomba.Roomba
 {
-    class SerialPortController
+    public class SerialPortController
     {
         private SerialPort serialPort;
 
