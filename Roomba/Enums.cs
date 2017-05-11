@@ -32,7 +32,8 @@ namespace Roomba
         /// Pieprasit sensoru datus no Roomba
         /// Parameter: pieprasitas sensoru paketes numurs
         /// </summary>
-        QuerySensorPacket = 142
+        QuerySensorPacket = 142,
+        DriveWheels = 145
     };
 
     public enum SensorPacket
@@ -45,5 +46,21 @@ namespace Roomba
     {
         Wander = 1,
         Stop = 2
+    }
+
+    /// <summary>
+    /// Komandas no lietotaja saskarsnes
+    /// Komanda ir 9 baitu wirkne, kur baiti:
+    /// 0 -> Komandas identifikators
+    /// 1..4 -> (int) Komandas pirmais parametrs
+    /// 5..8 -> (int) Komandas otrias parameters
+    /// </summary>
+    public enum RemoteCommandType
+    {
+        Drive=1,
+        ResetLocation=2,
+        Wander=3,
+        StopCurrentTAsk=254,
+        SpecialTask=255
     }
 }

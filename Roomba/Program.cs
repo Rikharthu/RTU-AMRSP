@@ -4,6 +4,8 @@ using System.Threading;
 using Roomba.Networking;
 using Roomba.Roomba;
 using Roomba.Tasks;
+using Roomba.Networking.StatusSending;
+using Roomba.Networking.RemoteCommands;
 
 namespace Roomba
 {
@@ -14,27 +16,60 @@ namespace Roomba
         private float lastKnownBatteryLevel = -1;
         private int status;
 
-        RoombaController controller;
+        private RoombaController controller;
+        private RobotStatusSender robotStatusSender;
+        private NetworkManager networkManager;
         private Task currentTask;
+
+        private RemoteCommandReceiver remoteCommandReceiver;
+
 
         public static void Main()
         {
             Program p = new Program();
-            p.Run();
+            p.Execute();
+            Thread.Sleep(-1);
         }
 
-        public void Run()
+        private Program()
         {
-            WebServer server = new WebServer();
-            server.setOnWebInterractionListener(this);
-            server.Start();
-            controller = new RoombaController();
+            this.controller = new RoombaController();
+            this.robotStatusSender = new RobotStatusSender(this.controller.Sensors);
+            this.networkManager = new NetworkManager();
 
-            status = WebServer.STATUS_STOPPED;
+            this.remoteCommandReceiver = new RemoteCommandReceiver();
+            this.remoteCommandReceiver.OnRemoteCommandReceived +=
+                new RemoteCommandReceiver.RemoteCommandReceivedDelegate(remoteCommandReceiver_RemoteCommandReceived);
+        }
 
-            while (true) { };
+        private void remoteCommandReceiver_RemoteCommandReceived(RemoteCommand remoteCommand)
+        {
+            this.StopCurrentTask();
 
-            Debug.Print("Dead");
+            if (remoteCommand.CommandType == RemoteCommandType.Drive)
+            {
+                Debug.Print("Received \"Drive\" command");
+                this.controller.CmdExecutor.DriveWheels(
+                    (short)remoteCommand.FirstParam, (short)remoteCommand.SecondParam);
+            }else if (remoteCommand.CommandType == RemoteCommandType.ResetLocation)
+            {
+                Debug.Print("Received \"Reset Location\" command");
+                // to be implemented
+            }
+            else if(remoteCommand.CommandType == RemoteCommandType.Wander)
+            {
+                Debug.Print("Received \"Wander\" command");
+                this.currentTask = new TaskWander(this.controller);
+                this.currentTask.Start();
+            }
+        }
+
+        public void Execute()
+        {
+            this.networkManager.Start();
+            this.controller.Start();
+            this.robotStatusSender.Start();
+            this.remoteCommandReceiver.Start();
         }
 
         private void StopCurrentTask()

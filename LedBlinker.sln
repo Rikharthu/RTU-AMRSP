@@ -29,6 +29,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MFConsoleApplication1", "MF
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Roomba V2", "Roomba V2\Roomba V2.csproj", "{0B0758B6-F8F1-4832-86FF-3B7037F00535}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sandbox", "Sandbox\Sandbox.csproj", "{664EE347-DCB6-497F-8AD6-CAD4602D63FD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -251,6 +253,18 @@ Global
 		{0B0758B6-F8F1-4832-86FF-3B7037F00535}.Release|x86.ActiveCfg = Release|Any CPU
 		{0B0758B6-F8F1-4832-86FF-3B7037F00535}.Release|x86.Build.0 = Release|Any CPU
 		{0B0758B6-F8F1-4832-86FF-3B7037F00535}.Release|x86.Deploy.0 = Release|Any CPU
+		{664EE347-DCB6-497F-8AD6-CAD4602D63FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{664EE347-DCB6-497F-8AD6-CAD4602D63FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{664EE347-DCB6-497F-8AD6-CAD4602D63FD}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{664EE347-DCB6-497F-8AD6-CAD4602D63FD}.Debug|x64.Build.0 = Debug|Any CPU
+		{664EE347-DCB6-497F-8AD6-CAD4602D63FD}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{664EE347-DCB6-497F-8AD6-CAD4602D63FD}.Debug|x86.Build.0 = Debug|Any CPU
+		{664EE347-DCB6-497F-8AD6-CAD4602D63FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{664EE347-DCB6-497F-8AD6-CAD4602D63FD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{664EE347-DCB6-497F-8AD6-CAD4602D63FD}.Release|x64.ActiveCfg = Release|Any CPU
+		{664EE347-DCB6-497F-8AD6-CAD4602D63FD}.Release|x64.Build.0 = Release|Any CPU
+		{664EE347-DCB6-497F-8AD6-CAD4602D63FD}.Release|x86.ActiveCfg = Release|Any CPU
+		{664EE347-DCB6-497F-8AD6-CAD4602D63FD}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

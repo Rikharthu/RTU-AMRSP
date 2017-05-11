@@ -38,6 +38,10 @@
     </StartupObject>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Networking\NetworkManager.cs" />
+    <Compile Include="Networking\RemoteCommands\RemoteCommand.cs" />
+    <Compile Include="Networking\RemoteCommands\RemoteCommandReceiver.cs" />
+    <Compile Include="Networking\StatusSending\RobotStatusSender.cs" />
     <Compile Include="Networking\WebServer.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="Roomba\Sensors\SensorController.cs" />

@@ -73,6 +73,20 @@ namespace Roomba.Roomba
             this.Drive(velocity, 32767);
         }
 
+        public void DriveWheels(short rightVelocity, short leftVelocity)
+        {
+            byte[] parameters =
+            {
+                Common.GetHighByte(rightVelocity),
+                Common.GetLowByte(rightVelocity),
+                Common.GetHighByte(leftVelocity),
+                Common.GetLowByte(leftVelocity)
+            };
+            logCommand(RoombaCommand.DriveWheels, parameters);
+            this.ExecCommand(RoombaCommand.DriveWheels, parameters);
+        }
+
+
         public void TurnRight(short velocity)
         {
             // -1 - right radius
@@ -96,12 +110,13 @@ namespace Roomba.Roomba
 
             byte[] parameters = new byte[4];
 
-            for(int i = 0; i < parameters.Length; i++)
+            for (int i = 0; i < parameters.Length; i++)
             {
                 if (i <= str.Length - 1)
                 {
                     parameters[i] = (byte)str[i];
-                }else
+                }
+                else
                 {
                     // fill blank space if str is shortet than 4 chars
                     parameters[i] = 32;
