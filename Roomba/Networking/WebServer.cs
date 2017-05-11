@@ -95,11 +95,11 @@ namespace Roomba.Networking
             {
                 if (isStartButtonPressed)
                 {
-                    roombaWebCtrl.OnCommandDispatched(CODE_START);
+                    roombaWebCtrl.OnWebCommandDispatched(CODE_START);
                 }
                 if (isStopButtonPressed)
                 {
-                    roombaWebCtrl.OnCommandDispatched(CODE_STOP);
+                    roombaWebCtrl.OnWebCommandDispatched(CODE_STOP);
                 }
             }
 
@@ -223,6 +223,6 @@ namespace Roomba.Networking
     {
         float GetChargeLevel();
         int GetStatus();
-        void OnCommandDispatched(int code);
+        void OnWebCommandDispatched(int code);
     }
 }

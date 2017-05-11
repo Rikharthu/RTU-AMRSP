@@ -29,7 +29,7 @@ namespace Roomba.Roomba
 
         public RoombaController()
         {
-            queriers = new Stack();
+            this.queriers = new Stack();
             this.serialPort = new SerialPortController(SERIAL_PORT_NAME, SERIAL_PORT_BAUD_RATE);
             this.cmdExecutor = new RoombaCommandExecutor(this.serialPort);
             // connected to serial port 5 DD (Device Detect), which is used to wake up Roomba

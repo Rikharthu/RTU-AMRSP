@@ -28,6 +28,11 @@ namespace Roomba.Tasks
             }
         }
 
+        public void Stop()
+        {
+            this.stop = true;
+        }
+
         protected abstract void DoWork();
     }
 }

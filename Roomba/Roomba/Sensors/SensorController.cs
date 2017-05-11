@@ -3,10 +3,20 @@ using Microsoft.SPOT;
 
 namespace Roomba.Roomba.Sensors
 {
-    class SensorController
+    public class SensorController
     {
+        public const int CODE_BUMP_NONE = 0;
+        public const int CODE_BUMP_LEFT = 1;
+        public const int CODE_BUMP_RIGHT = 2;
+        public const int CODE_BUMP_BOTH = 3;
+
         private short batteryCharge;
         private RoombaController roombaController;
+
+        public int BumpCode
+        {
+            get; private set;
+        }
 
         public int BatteryPercentage
         {
