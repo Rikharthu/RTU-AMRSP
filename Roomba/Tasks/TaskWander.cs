@@ -16,7 +16,8 @@ namespace Roomba.Tasks
         protected override void DoWork()
         {
             Random rnd = new Random();
-            while (!stop)
+            roombaController.Start();
+            while (!this.stop)
             {
                 if (this.roombaController.Sensors.IsBump)
                 {
@@ -55,6 +56,7 @@ namespace Roomba.Tasks
                     Thread.Sleep(50);
                 }
             }
+            roombaController.CmdExecutor.Stop();
         }    
     }
 }

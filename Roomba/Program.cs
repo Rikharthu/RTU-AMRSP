@@ -21,18 +21,18 @@ namespace Roomba
         {
             Program p = new Program();
             p.Run();
+            Thread.Sleep(-1);
         }
 
         public void Run()
         {
             WebServer server = new WebServer();
             server.setOnWebInterractionListener(this);
-            server.Start();
+
             controller = new RoombaController();
+            server.Start();
 
             status = WebServer.STATUS_STOPPED;
-
-            while (true) { };
 
             Debug.Print("Dead");
         }
@@ -62,12 +62,14 @@ namespace Roomba
             switch (code)
             {
                 case WebServer.CODE_START:
+                    Debug.Print("Received START command");
                     //status = WebServer.STATUS_DRIVING;
                     StopCurrentTask();
                     currentTask = new TaskWander(controller);
                     currentTask.Start();
                     break;
                 case WebServer.CODE_STOP:
+                    Debug.Print("Received STOP command");
                     //status = WebServer.STATUS_STOPPED;
                     StopCurrentTask();
                     currentTask = null;
