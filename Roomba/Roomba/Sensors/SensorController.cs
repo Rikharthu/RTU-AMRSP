@@ -54,6 +54,23 @@ namespace Roomba.Roomba.Sensors
             this.IsBump = isBumpLeft | isBumpRight;
 
             this.BumpsWheeldropsData = (byte)sensorData;
+
+            if (isBumpLeft && isBumpRight)
+            {
+                BumpCode = CODE_BUMP_BOTH;
+            }
+            else if (isBumpLeft)
+            {
+                BumpCode = CODE_BUMP_LEFT;
+            }
+            else if (isBumpRight)
+            {
+                BumpCode = CODE_BUMP_RIGHT;
+            }
+            else
+            {
+                BumpCode = CODE_BUMP_NONE;
+            }
         }
 
         private void BatteryChargeReceived(short sensorData)

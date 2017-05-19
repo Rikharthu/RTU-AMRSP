@@ -60,7 +60,7 @@ namespace Roomba
         Drive=1,
         ResetLocation=2,
         Wander=3,
-        StopCurrentTAsk=254,
+        StopCurrentTask=254,
         SpecialTask=255
     }
 }

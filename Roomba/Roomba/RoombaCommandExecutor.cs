@@ -75,6 +75,7 @@ namespace Roomba.Roomba
 
         public void DriveWheels(short rightVelocity, short leftVelocity)
         {
+            Debug.Print("right velocity: "+rightVelocity+", left velocity: "+leftVelocity);
             byte[] parameters =
             {
                 Common.GetHighByte(rightVelocity),

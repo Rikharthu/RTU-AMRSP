@@ -61,6 +61,14 @@ namespace Roomba
                 Debug.Print("Received \"Wander\" command");
                 this.currentTask = new TaskWander(this.controller);
                 this.currentTask.Start();
+            }else if (remoteCommand.CommandType == RemoteCommandType.SpecialTask)
+            {
+                Debug.Print("Received \"Special\" command");
+
+            }else if (remoteCommand.CommandType == RemoteCommandType.StopCurrentTask)
+            {
+                Debug.Print("Received \"Special\" command");
+                this.StopCurrentTask();
             }
         }
 

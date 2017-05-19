@@ -15,6 +15,9 @@ namespace Roomba.Roomba
         {
             this.serialPort = new SerialPort(portName, baudRate);
             this.Open();
+            //this.serialPort.Flush();
+            this.serialPort.DiscardInBuffer();
+            this.serialPort.DiscardOutBuffer();
         }
 
         private void Open()
@@ -31,7 +34,7 @@ namespace Roomba.Roomba
             {
                 this.Open();
                 this.serialPort.Write(dataToWrite, 0, dataToWrite.Length);
-                Thread.Sleep(50);
+                //Thread.Sleep(50);
             }
         }
 

@@ -29,7 +29,7 @@ namespace Roomba.Networking.StatusSending
             Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
 
             // TODO set to PC's IP Address
-            IPEndPoint endpoint = new IPEndPoint(new IPAddress(new byte[] { 192, 168, 17, 120 }), 666);
+            IPEndPoint endpoint = new IPEndPoint(new IPAddress(new byte[] { 192, 168, 17, 136 }), 666);
             // TODO set to router IP Address
             IPEndPoint routerEndpoint = new IPEndPoint(new IPAddress(new byte[] { 192, 168, 17, 1 }), 80);
 

@@ -25,8 +25,7 @@ namespace Roomba.Networking
                 (Cpu.Pin)FEZ_Pin.Digital.Di10,
                 (Cpu.Pin)FEZ_Pin.Digital.Di7,
                 false);
-
-            // TODO Set your own address
+            
             byte[] ipAddress = new byte[] { 192, 168, 17, 36 };
             byte[] netmask = new byte[] { 255, 255, 255, 0 };
             byte[] gateway = new byte[] { 192, 168, 17, 1 };

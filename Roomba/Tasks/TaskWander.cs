@@ -55,6 +55,7 @@ namespace Roomba.Tasks
                     Thread.Sleep(50);
                 }
             }
+            roombaController.CmdExecutor.Stop();
         }    
     }
 }

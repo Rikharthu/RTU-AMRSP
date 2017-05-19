@@ -41,7 +41,7 @@ namespace Roomba.Networking.RemoteCommands
         private void DoWork()
         {
             Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
-            // Lietotaja saskarsne suta uz robota IP adreses 12344 portu komandas
+            // Lietotaja saskarsne suta uz robota IP adreses 12344 portu komandas => listen on that port
             IPEndPoint endpoint = new IPEndPoint(IPAddress.Any, 12344);
 
             socket.Bind(endpoint);
@@ -60,12 +60,20 @@ namespace Roomba.Networking.RemoteCommands
                         socket.ReceiveFrom(commandBuffer, ref remoteEndpoint);
                         RemoteCommand command = this.GetRemoteCommand(commandBuffer);
 
+                        //debug:
+                        string msgStr = "";
+                        foreach (byte b in commandBuffer){
+                            msgStr += b + ", ";
+                        }
+                        Debug.Print(msgStr);
+
                         if (this.OnRemoteCommandReceived != null)
                         {
                             this.OnRemoteCommandReceived(command);
                         }
                     }
-                }catch(Exception ex)
+                }
+                catch (Exception ex)
                 {
                     Debug.Print("Error receiving command: " + ex.Message);
                 }
